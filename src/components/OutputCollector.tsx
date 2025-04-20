@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Save, Trash2 } from "lucide-react";
 
 interface OutputCollectorProps {
   output: string;
@@ -49,6 +50,7 @@ export function OutputCollector({
           value={output}
           onChange={(e) => setOutput(e.target.value)}
           className="min-h-[300px] font-serif text-base"
+          placeholder="Hier erscheint der generierte Text. Du kannst ihn vor dem Speichern bearbeiten."
         />
         
         <div className="flex justify-between items-center text-sm border-t pt-3">
@@ -61,13 +63,13 @@ export function OutputCollector({
               className="bg-green-600 hover:bg-green-700"
               disabled={!output}
             >
-              📝 In Kapitel übernehmen
+              <Save className="mr-2 h-4 w-4" /> In Kapitel übernehmen
             </Button>
             <Button 
               variant="outline" 
               onClick={onDiscard}
             >
-              ♻️ Verwerfen
+              <Trash2 className="mr-2 h-4 w-4" /> Verwerfen
             </Button>
           </div>
         </div>
