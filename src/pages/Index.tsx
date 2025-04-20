@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,6 +8,7 @@ import { FileText, Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { OutputCollector } from "@/components/OutputCollector";
+import { useOutputCollection } from "@/hooks/useOutputCollection";
 
 const INITIAL_CHAPTER: Chapter = {
   id: 1,
@@ -23,8 +23,6 @@ export default function Index() {
   const [genre, setGenre] = useState("roman");
   const [chapters, setChapters] = useState<Chapter[]>([INITIAL_CHAPTER]);
   const [projectTitle, setProjectTitle] = useState("Mein Buchprojekt");
-  const [currentOutput, setCurrentOutput] = useState("");
-  const [outputMeta, setOutputMeta] = useState({ chapterId: 0, prompt: "" });
 
   const handleUpdateChapter = (index: number, updatedChapter: Chapter) => {
     const newChapters = [...chapters];
@@ -38,6 +36,15 @@ export default function Index() {
       { ...INITIAL_CHAPTER, id: chapters.length + 1 },
     ]);
   };
+
+  const {
+    currentOutput,
+    setCurrentOutput,
+    outputMeta,
+    handleGeneratedOutput,
+    handleSaveToChapter,
+    handleDiscardOutput
+  } = useOutputCollection(handleUpdateChapter, chapters);
 
   const handleExport = (includePrompts: boolean = false) => {
     try {
@@ -73,32 +80,6 @@ export default function Index() {
     } catch (error) {
       console.error("Fehler beim Exportieren:", error);
     }
-  };
-
-  const handleGeneratedOutput = (text: string, chapterId: number, prompt: string) => {
-    setCurrentOutput(text);
-    setOutputMeta({ chapterId, prompt });
-  };
-
-  const handleSaveToChapter = () => {
-    if (outputMeta.chapterId && currentOutput) {
-      const chapterIndex = chapters.findIndex(c => c.id === outputMeta.chapterId);
-      if (chapterIndex !== -1) {
-        const updatedChapter = { 
-          ...chapters[chapterIndex], 
-          content: currentOutput,
-          status: "in-arbeit" as const
-        };
-        handleUpdateChapter(chapterIndex, updatedChapter);
-        setCurrentOutput("");
-        setOutputMeta({ chapterId: 0, prompt: "" });
-      }
-    }
-  };
-
-  const handleDiscardOutput = () => {
-    setCurrentOutput("");
-    setOutputMeta({ chapterId: 0, prompt: "" });
   };
 
   return (
