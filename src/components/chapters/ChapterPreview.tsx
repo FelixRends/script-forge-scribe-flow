@@ -7,13 +7,27 @@ import { Eye } from "lucide-react";
 
 interface ChapterPreviewProps {
   chapter: Chapter;
+  format?: {
+    name: string;
+    dimensions: string;
+    charactersPerPage: string;
+  };
 }
 
-export function ChapterPreview({ chapter }: ChapterPreviewProps) {
+export function ChapterPreview({ chapter, format }: ChapterPreviewProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const hasContent = chapter.sections.length > 0 && chapter.sections.some(s => s.content);
-
+  
+  // Calculate estimated pages based on format
+  const totalCharacters = chapter.sections.reduce((sum, section) => sum + section.content.length, 0);
+  const charactersPerPage = format ? parseInt(format.charactersPerPage) : 2000;
+  const estimatedPages = Math.ceil(totalCharacters / charactersPerPage);
+  
+  // Set preview dimensions based on format
+  const [width, height] = format ? format.dimensions.split('x').map(d => parseFloat(d)) : [13.5, 21];
+  const aspectRatio = width / height;
+  
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -26,29 +40,49 @@ export function ChapterPreview({ chapter }: ChapterPreviewProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-4xl">
         <DialogHeader>
-          <DialogTitle>
-            Kapitel {chapter.id}: {chapter.title || "Unbenannt"}
+          <DialogTitle className="flex justify-between items-center">
+            <span>Kapitel {chapter.id}: {chapter.title || "Unbenannt"}</span>
+            {format && (
+              <span className="text-sm text-muted-foreground">
+                Format: {format.name} ({format.dimensions} cm)
+              </span>
+            )}
           </DialogTitle>
         </DialogHeader>
         
-        <div className="max-h-[70vh] overflow-y-auto p-4 border rounded-md bg-background font-serif text-base space-y-4">
-          {chapter.sections.length > 0 ? (
-            chapter.sections.map((section, index) => (
-              <div key={section.id} className="mb-6">
-                <h3 className="font-medium text-muted-foreground mb-2">Abschnitt {index + 1}</h3>
-                <div className="whitespace-pre-wrap">{section.content}</div>
-              </div>
-            ))
-          ) : (
-            <p className="text-muted-foreground text-center py-8">
-              Keine Abschnitte vorhanden. Füge zuerst Abschnitte zu diesem Kapitel hinzu.
-            </p>
-          )}
+        <div 
+          className="relative border rounded-md bg-background p-8 mx-auto"
+          style={{
+            width: '100%',
+            maxWidth: '600px',
+            aspectRatio: aspectRatio,
+            fontFamily: 'serif'
+          }}
+        >
+          <div className="max-h-full overflow-y-auto">
+            {chapter.sections.length > 0 ? (
+              chapter.sections.map((section, index) => (
+                <div key={section.id} className="mb-6">
+                  <div className="whitespace-pre-wrap text-base leading-relaxed">
+                    {section.content}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-muted-foreground text-center py-8">
+                Keine Abschnitte vorhanden. Füge zuerst Abschnitte zu diesem Kapitel hinzu.
+              </p>
+            )}
+          </div>
         </div>
         
-        <div className="flex justify-end">
+        <div className="flex justify-between items-center mt-4">
+          <div className="text-sm text-muted-foreground">
+            ~{estimatedPages} {estimatedPages === 1 ? 'Seite' : 'Seiten'} 
+            ({totalCharacters} Zeichen von {chapter.depthOfField})
+          </div>
           <Button onClick={() => setIsOpen(false)}>Schließen</Button>
         </div>
       </DialogContent>

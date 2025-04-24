@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -24,6 +23,11 @@ const INITIAL_CHAPTER: Chapter = {
 
 export default function Index() {
   const [genre, setGenre] = useState("roman");
+  const [selectedFormat, setSelectedFormat] = useState<{
+    name: string;
+    dimensions: string;
+    charactersPerPage: string;
+  } | null>(null);
   const [chapters, setChapters] = useState<Chapter[]>([INITIAL_CHAPTER]);
   const [projectTitle, setProjectTitle] = useState("Mein Buchprojekt");
 
@@ -154,7 +158,10 @@ export default function Index() {
         <Card>
           <CardContent className="pt-6">
             <h2 className="text-2xl font-semibold mb-4">2. Format wählen</h2>
-            <BookFormats genre={genre} />
+            <BookFormats 
+              genre={genre} 
+              onFormatSelect={(format) => setSelectedFormat(format)}
+            />
           </CardContent>
         </Card>
 
@@ -181,6 +188,7 @@ export default function Index() {
               onAddChapter={handleAddChapter}
               onGeneratedOutput={handleGeneratedOutput}
               genre={genre}
+              selectedFormat={selectedFormat || undefined}
             />
           </CardContent>
         </Card>

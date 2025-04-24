@@ -19,6 +19,11 @@ interface ChapterEditorProps {
   onAddChapter: () => void;
   onGeneratedOutput: (text: string, chapterId: number, prompt: string) => void;
   genre: string;
+  selectedFormat?: {
+    name: string;
+    dimensions: string;
+    charactersPerPage: string;
+  };
 }
 
 export function ChapterEditor({ 
@@ -26,7 +31,8 @@ export function ChapterEditor({
   onUpdateChapter: parentUpdateChapter, 
   onAddChapter: parentAddChapter, 
   onGeneratedOutput,
-  genre
+  genre,
+  selectedFormat
 }: ChapterEditorProps) {
   const [activeRole, setActiveRole] = useState<string>("wissenschaftlich");
   const { isGenerating, generateText } = useTextGeneration(onGeneratedOutput);
@@ -131,13 +137,7 @@ export function ChapterEditor({
                     {expandedChapter === chapter.id ? "Abschnitte einklappen" : "Abschnitte anzeigen"}
                   </Button>
                   
-                  <Button 
-                    variant="outline" 
-                    className="text-sm flex items-center gap-1"
-                    onClick={() => window.alert('Kapitelvorschau wird in der nächsten Version implementiert')}
-                  >
-                    <span>👁️</span> Kapitelvorschau
-                  </Button>
+                  <ChapterPreview chapter={chapter} format={selectedFormat} />
                 </div>
               </div>
             </div>

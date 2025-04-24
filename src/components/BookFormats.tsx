@@ -1,5 +1,5 @@
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 interface Format {
   name: string;
@@ -10,9 +10,10 @@ interface Format {
 
 interface BookFormatsProps {
   genre: string;
+  onFormatSelect?: (format: Format) => void;
 }
 
-export function BookFormats({ genre }: BookFormatsProps) {
+export function BookFormats({ genre, onFormatSelect }: BookFormatsProps) {
   const formats: Record<string, Format[]> = {
     roman: [
       { name: "Taschenbuch", dimensions: "12,5 x 19", charactersPerPage: "1.800", suitableFor: "Belletristik" },
@@ -55,7 +56,14 @@ export function BookFormats({ genre }: BookFormatsProps) {
         </TableHeader>
         <TableBody>
           {(formats[genre] || []).map((format) => (
-            <TableRow key={format.name}>
+            <TableRow 
+              key={format.name}
+              onClick={() => onFormatSelect?.(format)}
+              className={cn(
+                "cursor-pointer hover:bg-muted/50 transition-colors",
+                "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              )}
+            >
               <TableCell className="font-medium">{format.name}</TableCell>
               <TableCell>{format.dimensions}</TableCell>
               <TableCell>{format.charactersPerPage}</TableCell>
