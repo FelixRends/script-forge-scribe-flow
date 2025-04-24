@@ -1,11 +1,10 @@
-
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import type { Chapter } from "../ChapterEditor";
+import type { Chapter } from "@/types/bookTypes";
 
 interface PromptGeneratorProps {
   chapter: Chapter;

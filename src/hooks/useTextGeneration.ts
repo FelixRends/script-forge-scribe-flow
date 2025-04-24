@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Chapter } from "@/components/ChapterEditor";
+import { Chapter } from "@/types/bookTypes";
 
 export const useTextGeneration = (onGeneratedOutput: (text: string, chapterId: number, prompt: string) => void) => {
   const [isGenerating, setIsGenerating] = useState<number | null>(null);

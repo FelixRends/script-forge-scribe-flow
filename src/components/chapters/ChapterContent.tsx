@@ -1,7 +1,7 @@
 
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import type { Chapter } from "../ChapterEditor";
+import type { Chapter } from "@/types/bookTypes";
 
 interface ChapterContentProps {
   chapter: Chapter;
