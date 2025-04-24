@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -142,29 +143,30 @@ export default function Index() {
         </Card>
 
         {currentOutput && (
-        <OutputCollector 
-          output={currentOutput}
-          setOutput={setCurrentOutput}
-          summary={currentSummary}
-          setSummary={setCurrentSummary}
-          onSave={handleSaveToChapter}
-          onDiscard={handleDiscardOutput}
-          chapterId={outputMeta.chapterId}
-        />
-      )}
-
-      <Card>
-        <CardContent className="pt-6">
-          <h2 className="text-2xl font-semibold mb-4">3. Kapitel verwalten</h2>
-          <ChapterEditor
-            chapters={chapters}
-            onUpdateChapter={handleUpdateChapter}
-            onAddChapter={handleAddChapter}
-            onGeneratedOutput={handleGeneratedOutput}
-            genre={genre}
+          <OutputCollector 
+            output={currentOutput}
+            setOutput={setCurrentOutput}
+            summary={currentSummary}
+            setSummary={setCurrentSummary}
+            onSave={handleSaveToChapter}
+            onDiscard={handleDiscardOutput}
+            chapterId={outputMeta.chapterId}
           />
-        </CardContent>
-      </Card>
+        )}
+
+        <Card>
+          <CardContent className="pt-6">
+            <h2 className="text-2xl font-semibold mb-4">3. Kapitel verwalten</h2>
+            <ChapterEditor
+              chapters={chapters}
+              onUpdateChapter={handleUpdateChapter}
+              onAddChapter={handleAddChapter}
+              onGeneratedOutput={handleGeneratedOutput}
+              genre={genre}
+            />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
