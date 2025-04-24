@@ -10,6 +10,9 @@ interface ChapterContentProps {
 }
 
 export function ChapterContent({ chapter, index, onUpdateChapter }: ChapterContentProps) {
+  // Combine content from all sections if exists
+  const combinedContent = chapter.sections.map(section => section.content).join('\n\n');
+
   return (
     <div className="space-y-2 border p-4 rounded-md">
       <div className="flex items-center text-sm font-medium mb-2">
@@ -23,16 +26,22 @@ export function ChapterContent({ chapter, index, onUpdateChapter }: ChapterConte
           <Textarea
             id={`chapter-content-${chapter.id}`}
             placeholder="Hier erscheint der gespeicherte Kapiteltext..."
-            value={chapter.content}
+            value={combinedContent}
             onChange={(e) =>
-              onUpdateChapter(index, { ...chapter, content: e.target.value })
+              onUpdateChapter(index, { 
+                ...chapter, 
+                sections: chapter.sections.map((section, idx) => ({
+                  ...section,
+                  content: e.target.value.split('\n\n')[idx] || ''
+                }))
+              })
             }
             className="min-h-[200px] bg-background"
             readOnly={chapter.status === "fertig"}
           />
           <div className="text-xs text-muted-foreground flex justify-between mt-1">
-            <span>{chapter.content.length} von {chapter.depthOfField} Zeichen</span>
-            {chapter.content && (
+            <span>{combinedContent.length} von {chapter.depthOfField} Zeichen</span>
+            {combinedContent && (
               <span>Zuletzt aktualisiert: {new Date().toLocaleDateString()}</span>
             )}
           </div>
