@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Chapter } from "@/components/ChapterEditor";
+import { Chapter } from "@/types/bookTypes";
 
 export const useChapterManagement = (initialChapters: Chapter[]) => {
   const [chapters, setChapters] = useState<Chapter[]>(initialChapters);
@@ -15,7 +15,8 @@ export const useChapterManagement = (initialChapters: Chapter[]) => {
     setChapters([...chapters, { 
       ...initialChapter, 
       id: chapters.length + 1,
-      summary: initialChapter.summary || "" 
+      summary: initialChapter.summary || "",
+      sections: initialChapter.sections || []
     }]);
   };
 

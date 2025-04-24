@@ -14,6 +14,8 @@ interface OutputCollectorProps {
   onSave: () => void;
   onDiscard: () => void;
   chapterId: number;
+  comment?: string;
+  setComment?: (comment: string) => void;
 }
 
 export function OutputCollector({ 
@@ -23,7 +25,9 @@ export function OutputCollector({
   setSummary,
   onSave, 
   onDiscard,
-  chapterId
+  chapterId,
+  comment = "",
+  setComment
 }: OutputCollectorProps) {
   const [charCount, setCharCount] = useState(0);
   const [paragraphCount, setParagraphCount] = useState(0);
@@ -64,18 +68,36 @@ export function OutputCollector({
               placeholder="Hier erscheint der generierte Text. Du kannst ihn vor dem Speichern bearbeiten."
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="output-summary" className="font-medium flex items-center">
-              <span className="mr-2">📋</span>
-              Kurzzusammenfassung für den nächsten Abschnitt
-            </Label>
-            <Textarea
-              id="output-summary"
-              value={summary}
-              onChange={(e) => setSummary(e.target.value)}
-              className="min-h-[300px]"
-              placeholder="Erstelle hier eine Kurzzusammenfassung dieses Abschnitts, die als Kontext für den nächsten Prompt dienen wird."
-            />
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="output-summary" className="font-medium flex items-center">
+                <span className="mr-2">📋</span>
+                Kurzzusammenfassung für den nächsten Abschnitt
+              </Label>
+              <Textarea
+                id="output-summary"
+                value={summary}
+                onChange={(e) => setSummary(e.target.value)}
+                className="min-h-[150px]"
+                placeholder="Erstelle hier eine Kurzzusammenfassung dieses Abschnitts, die als Kontext für den nächsten Prompt dienen wird."
+              />
+            </div>
+            
+            {setComment && (
+              <div className="space-y-2">
+                <Label htmlFor="output-comment" className="font-medium flex items-center">
+                  <span className="mr-2">🔄</span>
+                  Semantische Brücke / Kommentar
+                </Label>
+                <Textarea
+                  id="output-comment"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  className="min-h-[100px]"
+                  placeholder="Optional: Notizen zu Verbindungen mit anderen Kapiteln oder Abschnitten"
+                />
+              </div>
+            )}
           </div>
         </div>
         
@@ -89,7 +111,7 @@ export function OutputCollector({
               className="bg-green-600 hover:bg-green-700"
               disabled={!output}
             >
-              <Save className="mr-2 h-4 w-4" /> In Kapitel übernehmen
+              <Save className="mr-2 h-4 w-4" /> Als neuen Abschnitt speichern
             </Button>
             <Button 
               variant="outline" 

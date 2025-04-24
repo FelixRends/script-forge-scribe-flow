@@ -1,22 +1,17 @@
+
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ChapterStatusBadge } from "./chapters/ChapterStatusBadge";
 import { PromptGenerator } from "./chapters/PromptGenerator";
-import { ChapterContent } from "./chapters/ChapterContent";
-import { useTextGeneration } from "@/hooks/useTextGeneration";
+import { SectionsList } from "./chapters/SectionsList";
 import { useChapterManagement } from "@/hooks/useChapterManagement";
-
-export interface Chapter {
-  id: number;
-  title: string;
-  context: string;
-  status: "offen" | "in-arbeit" | "fertig";
-  depthOfField: number;
-  content: string;
-  summary: string; // Neue Eigenschaft für die Zusammenfassung des Abschnitts
-}
+import { useTextGeneration } from "@/hooks/useTextGeneration";
+import { Chapter } from "@/types/bookTypes";
+import { Textarea } from "./ui/textarea";
+import { Label } from "./ui/label";
+import { Plus } from "lucide-react";
 
 interface ChapterEditorProps {
   chapters: Chapter[];
@@ -36,10 +31,15 @@ export function ChapterEditor({
   const [activeRole, setActiveRole] = useState<string>("wissenschaftlich");
   const { isGenerating, generateText } = useTextGeneration(onGeneratedOutput);
   const { chapters, updateChapter, updateChapterStatus } = useChapterManagement(initialChapters);
+  const [expandedChapter, setExpandedChapter] = useState<number | null>(null);
 
   const handleGenerateText = async (index: number) => {
     const chapter = chapters[index];
     await generateText(chapter, index, genre, activeRole);
+  };
+
+  const toggleChapterExpansion = (chapterId: number) => {
+    setExpandedChapter(expandedChapter === chapterId ? null : chapterId);
   };
 
   return (
@@ -65,6 +65,20 @@ export function ChapterEditor({
               <ChapterStatusBadge status={chapter.status} />
             </div>
             
+            <div className="space-y-2">
+              <Label htmlFor={`chapter-summary-${chapter.id}`}>Kapitelzusammenfassung</Label>
+              <Textarea
+                id={`chapter-summary-${chapter.id}`}
+                placeholder="Zusammenfassung des gesamten Kapitels..."
+                value={chapter.summary || ""}
+                onChange={(e) => {
+                  updateChapter(index, { ...chapter, summary: e.target.value });
+                  parentUpdateChapter(index, { ...chapter, summary: e.target.value });
+                }}
+                className="min-h-[100px]"
+              />
+            </div>
+            
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <PromptGenerator
                 chapter={chapter}
@@ -80,14 +94,52 @@ export function ChapterEditor({
                 isGenerating={isGenerating === index}
               />
               
-              <ChapterContent
-                chapter={chapter}
-                index={index}
-                onUpdateChapter={(index, updatedChapter) => {
-                  updateChapter(index, updatedChapter);
-                  parentUpdateChapter(index, updatedChapter);
-                }}
-              />
+              <div className="space-y-4 border p-4 rounded-md">
+                <div className="flex items-center text-sm font-medium mb-2">
+                  <span className="mr-2">📄 Abschnitte</span>
+                  <div className="flex-1 h-px bg-border"></div>
+                </div>
+                
+                <Button
+                  onClick={() => toggleChapterExpansion(chapter.id)}
+                  variant="outline"
+                  className="w-full text-left justify-start"
+                >
+                  {chapter.sections.length === 0 
+                    ? "Keine Abschnitte vorhanden" 
+                    : `${chapter.sections.length} Abschnitte`}
+                  {expandedChapter === chapter.id ? " (einklappen)" : " (ausklappen)"}
+                </Button>
+                
+                {expandedChapter === chapter.id && (
+                  <SectionsList 
+                    chapter={chapter}
+                    chapterIndex={index}
+                    onUpdateChapter={(updatedChapter) => {
+                      updateChapter(index, updatedChapter);
+                      parentUpdateChapter(index, updatedChapter);
+                    }}
+                  />
+                )}
+                
+                <div className="flex justify-between mt-4">
+                  <Button 
+                    variant="outline"
+                    onClick={() => toggleChapterExpansion(chapter.id)}
+                    className="text-sm"
+                  >
+                    {expandedChapter === chapter.id ? "Abschnitte einklappen" : "Abschnitte anzeigen"}
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="text-sm flex items-center gap-1"
+                    onClick={() => window.alert('Kapitelvorschau wird in der nächsten Version implementiert')}
+                  >
+                    <span>👁️</span> Kapitelvorschau
+                  </Button>
+                </div>
+              </div>
             </div>
             
             <div className="flex justify-between space-x-2 pt-2">

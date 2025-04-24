@@ -3,13 +3,14 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookFormats } from "@/components/BookFormats";
-import { ChapterEditor, type Chapter } from "@/components/ChapterEditor";
+import { ChapterEditor } from "@/components/ChapterEditor";
 import { Button } from "@/components/ui/button";
 import { FileText, Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { OutputCollector } from "@/components/OutputCollector";
 import { useOutputCollection } from "@/hooks/useOutputCollection";
+import { Chapter } from "@/types/bookTypes";
 
 const INITIAL_CHAPTER: Chapter = {
   id: 1,
@@ -17,8 +18,8 @@ const INITIAL_CHAPTER: Chapter = {
   context: "",
   status: "offen",
   depthOfField: 4000,
-  content: "",
-  summary: "", // Initialisierung der neuen Eigenschaft
+  sections: [],
+  summary: "",
 };
 
 export default function Index() {
@@ -44,6 +45,8 @@ export default function Index() {
     setCurrentOutput,
     currentSummary,
     setCurrentSummary,
+    currentComment,
+    setCurrentComment,
     outputMeta,
     handleGeneratedOutput,
     handleSaveToChapter,
@@ -56,17 +59,30 @@ export default function Index() {
       let exportContent = `# ${projectTitle}\n\n`;
       
       chapters.forEach((chapter, index) => {
-        if (chapter.title || chapter.content) {
+        if (chapter.title || chapter.sections?.length > 0) {
           exportContent += `## Kapitel ${index + 1}: ${chapter.title || `Unbenannt`}\n\n`;
           
           if (includePrompts && chapter.context) {
             exportContent += `### Prompt:\n${chapter.context}\n\n`;
           }
           
-          if (chapter.content) {
-            exportContent += `${chapter.content}\n\n`;
+          if (chapter.sections && chapter.sections.length > 0) {
+            chapter.sections.forEach((section, sectionIndex) => {
+              exportContent += `### Abschnitt ${sectionIndex + 1}\n\n`;
+              exportContent += `${section.content}\n\n`;
+              
+              if (includePrompts) {
+                if (section.summary) {
+                  exportContent += `#### Zusammenfassung:\n${section.summary}\n\n`;
+                }
+                
+                if (section.comment) {
+                  exportContent += `#### Kommentar:\n${section.comment}\n\n`;
+                }
+              }
+            });
           } else {
-            exportContent += `[Kein Inhalt generiert]\n\n`;
+            exportContent += `[Keine Abschnitte vorhanden]\n\n`;
           }
         }
       });
@@ -148,6 +164,8 @@ export default function Index() {
             setOutput={setCurrentOutput}
             summary={currentSummary}
             setSummary={setCurrentSummary}
+            comment={currentComment}
+            setComment={setCurrentComment}
             onSave={handleSaveToChapter}
             onDiscard={handleDiscardOutput}
             chapterId={outputMeta.chapterId}
