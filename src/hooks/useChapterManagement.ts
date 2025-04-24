@@ -12,7 +12,11 @@ export const useChapterManagement = (initialChapters: Chapter[]) => {
   };
 
   const addChapter = (initialChapter: Chapter) => {
-    setChapters([...chapters, { ...initialChapter, id: chapters.length + 1 }]);
+    setChapters([...chapters, { 
+      ...initialChapter, 
+      id: chapters.length + 1,
+      summary: initialChapter.summary || "" 
+    }]);
   };
 
   const updateChapterStatus = (index: number, status: Chapter["status"]) => {

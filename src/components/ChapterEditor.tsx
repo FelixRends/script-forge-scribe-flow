@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,6 +15,7 @@ export interface Chapter {
   status: "offen" | "in-arbeit" | "fertig";
   depthOfField: number;
   content: string;
+  summary: string; // Neue Eigenschaft für die Zusammenfassung des Abschnitts
 }
 
 interface ChapterEditorProps {

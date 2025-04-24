@@ -4,10 +4,13 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Save, Trash2 } from "lucide-react";
+import { Label } from "@/components/ui/label";
 
 interface OutputCollectorProps {
   output: string;
   setOutput: (output: string) => void;
+  summary: string;
+  setSummary: (summary: string) => void;
   onSave: () => void;
   onDiscard: () => void;
   chapterId: number;
@@ -15,7 +18,9 @@ interface OutputCollectorProps {
 
 export function OutputCollector({ 
   output, 
-  setOutput, 
+  setOutput,
+  summary,
+  setSummary,
   onSave, 
   onDiscard,
   chapterId
@@ -46,12 +51,33 @@ export function OutputCollector({
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Textarea 
-          value={output}
-          onChange={(e) => setOutput(e.target.value)}
-          className="min-h-[300px] font-serif text-base"
-          placeholder="Hier erscheint der generierte Text. Du kannst ihn vor dem Speichern bearbeiten."
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="output-text" className="font-medium">
+              Haupttext (3000-5000 Zeichen)
+            </Label>
+            <Textarea 
+              id="output-text"
+              value={output}
+              onChange={(e) => setOutput(e.target.value)}
+              className="min-h-[300px] font-serif text-base"
+              placeholder="Hier erscheint der generierte Text. Du kannst ihn vor dem Speichern bearbeiten."
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="output-summary" className="font-medium flex items-center">
+              <span className="mr-2">📋</span>
+              Kurzzusammenfassung für den nächsten Abschnitt
+            </Label>
+            <Textarea
+              id="output-summary"
+              value={summary}
+              onChange={(e) => setSummary(e.target.value)}
+              className="min-h-[300px]"
+              placeholder="Erstelle hier eine Kurzzusammenfassung dieses Abschnitts, die als Kontext für den nächsten Prompt dienen wird."
+            />
+          </div>
+        </div>
         
         <div className="flex justify-between items-center text-sm border-t pt-3">
           <span>
