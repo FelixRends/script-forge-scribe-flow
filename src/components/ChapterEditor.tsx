@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ChapterStatusBadge } from "./chapters/ChapterStatusBadge";
 import { PromptGenerator } from "./chapters/PromptGenerator";
 import { SectionsList } from "./chapters/SectionsList";
+import { ChapterPreview } from "./chapters/ChapterPreview";
 import { useChapterManagement } from "@/hooks/useChapterManagement";
 import { useTextGeneration } from "@/hooks/useTextGeneration";
 import { Chapter } from "@/types/bookTypes";
