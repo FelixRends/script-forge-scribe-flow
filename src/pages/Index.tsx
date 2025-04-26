@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -25,9 +24,22 @@ const INITIAL_CHAPTER: Chapter = {
   summary: "",
 };
 
+// Define the ProjectData interface to match what ProjectManager expects
+interface ProjectData {
+  projectTitle: string;
+  genre: string;
+  chapters: Chapter[];
+  selectedFormat?: {
+    name: string;
+    dimensions: string;
+    charactersPerPage: string;
+  } | null;
+  lastSaved: string;
+}
+
 export default function Index() {
   const [genre, setGenre] = useState("roman");
-  const [selectedFormat, setSelectedFormat] = useState<{
+  const [selectedFormat, setSelectedFormat<{
     name: string;
     dimensions: string;
     charactersPerPage: string;
@@ -48,20 +60,12 @@ export default function Index() {
     ]);
   };
 
-  const handleProjectLoad = (data: {
-    projectTitle: string;
-    genre: string;
-    chapters: Chapter[];
-    selectedFormat: {
-      name: string;
-      dimensions: string;
-      charactersPerPage: string;
-    } | null;
-  }) => {
+  // Update the handleProjectLoad function to match the ProjectData interface
+  const handleProjectLoad = (data: ProjectData) => {
     setProjectTitle(data.projectTitle);
     setGenre(data.genre);
     setChapters(data.chapters);
-    setSelectedFormat(data.selectedFormat);
+    setSelectedFormat(data.selectedFormat || null);
   };
 
   const {
