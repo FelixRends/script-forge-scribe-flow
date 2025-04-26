@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Database, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 export function SupabaseIntegration() {
   const { toast } = useToast();
@@ -21,11 +22,14 @@ export function SupabaseIntegration() {
     toast({
       title: "Supabase-Integration aktivieren",
       description: "Klicken Sie auf den grünen Supabase-Button in der rechten oberen Ecke der Lovable-Plattform, um die Integration zu verbinden.",
-      action: {
-        label: "Dokumentation",
-        altText: "Zur Dokumentation",
-        onClick: () => window.open("https://docs.lovable.dev/integrations/supabase", "_blank")
-      },
+      action: (
+        <ToastAction 
+          altText="Zur Dokumentation" 
+          onClick={() => window.open("https://docs.lovable.dev/integrations/supabase", "_blank")}
+        >
+          Dokumentation
+        </ToastAction>
+      ),
       duration: 7000,
     });
     setIsDialogOpen(false);
