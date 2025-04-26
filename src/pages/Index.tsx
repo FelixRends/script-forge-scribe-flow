@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,6 +11,9 @@ import { Label } from "@/components/ui/label";
 import { OutputCollector } from "@/components/OutputCollector";
 import { useOutputCollection } from "@/hooks/useOutputCollection";
 import { Chapter } from "@/types/bookTypes";
+import { Tutorial } from "@/components/Tutorial";
+import { LMMApiIntegration } from "@/components/LMMApiIntegration";
+import { ProjectManager } from "@/components/ProjectManager";
 
 const INITIAL_CHAPTER: Chapter = {
   id: 1,
@@ -42,6 +46,22 @@ export default function Index() {
       ...chapters,
       { ...INITIAL_CHAPTER, id: chapters.length + 1 },
     ]);
+  };
+
+  const handleProjectLoad = (data: {
+    projectTitle: string;
+    genre: string;
+    chapters: Chapter[];
+    selectedFormat: {
+      name: string;
+      dimensions: string;
+      charactersPerPage: string;
+    } | null;
+  }) => {
+    setProjectTitle(data.projectTitle);
+    setGenre(data.genre);
+    setChapters(data.chapters);
+    setSelectedFormat(data.selectedFormat);
   };
 
   const {
@@ -109,7 +129,7 @@ export default function Index() {
   return (
     <div className="container mx-auto p-6 max-w-5xl">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold text-center">Buchgenerator</h1>
+        <h1 className="text-4xl font-bold text-center">LMM Buchgenerator</h1>
         <div className="flex gap-2">
           <Button 
             variant="outline" 
@@ -126,6 +146,20 @@ export default function Index() {
             <Download size={18} />
             <span className="hidden sm:inline">Nur Text exportieren</span>
           </Button>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center mb-6">
+        <Tutorial />
+        <div className="flex gap-2">
+          <LMMApiIntegration />
+          <ProjectManager 
+            projectTitle={projectTitle}
+            genre={genre}
+            chapters={chapters}
+            selectedFormat={selectedFormat}
+            onProjectLoad={handleProjectLoad}
+          />
         </div>
       </div>
 
