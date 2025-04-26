@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,6 +14,7 @@ import { Chapter } from "@/types/bookTypes";
 import { Tutorial } from "@/components/Tutorial";
 import { LMMApiIntegration } from "@/components/LMMApiIntegration";
 import { ProjectManager } from "@/components/ProjectManager";
+import { SupabaseIntegration } from "@/components/SupabaseIntegration";
 
 const INITIAL_CHAPTER: Chapter = {
   id: 1,
@@ -157,6 +159,7 @@ export default function Index() {
         <Tutorial />
         <div className="flex gap-2">
           <LMMApiIntegration />
+          <SupabaseIntegration />
           <ProjectManager 
             projectTitle={projectTitle}
             genre={genre}

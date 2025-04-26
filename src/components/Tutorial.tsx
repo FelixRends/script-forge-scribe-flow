@@ -41,7 +41,11 @@ export function Tutorial() {
       description: "Du kannst dein Projekt jederzeit speichern und später wieder laden, um deine Arbeit fortzusetzen.",
     },
     {
-      title: "6. Exportieren",
+      title: "6. Supabase-Integration",
+      description: "Verbinde dein Projekt mit Supabase, um deine Daten sicher in der Cloud zu speichern und von überall darauf zuzugreifen. Die Integration ermöglicht Authentifizierung, Datenbank-Funktionen und Dateispeicherung.",
+    },
+    {
+      title: "7. Exportieren",
       description: "Wenn du fertig bist, exportiere dein Buch in verschiedenen Formaten, um es zu teilen oder zu veröffentlichen.",
     },
   ];
