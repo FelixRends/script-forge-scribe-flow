@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { 
   Dialog,
@@ -42,7 +41,13 @@ export function Tutorial() {
     },
     {
       title: "6. Supabase-Integration",
-      description: "Verbinde dein Projekt mit Supabase, um deine Daten sicher in der Cloud zu speichern und von überall darauf zuzugreifen. Die Integration ermöglicht Authentifizierung, Datenbank-Funktionen und Dateispeicherung.",
+      description: "Um Ihre Daten sicher zu speichern, müssen Sie die Supabase-Integration über Lovable aktivieren:",
+      steps: [
+        "Klicken Sie auf den grünen Supabase-Button in der rechten oberen Ecke der Lovable-Plattform",
+        "Wählen Sie 'Projekt verbinden' oder 'Neues Projekt erstellen'",
+        "Folgen Sie den Anweisungen zur Authentifizierung und Projektkonfiguration",
+        "Nach der Verbindung können Sie Ihre Buchprojekte sicher in der Cloud speichern"
+      ]
     },
     {
       title: "7. Exportieren",
@@ -83,6 +88,14 @@ export function Tutorial() {
               {tutorialSteps[currentStep].description}
             </DialogDescription>
           </DialogHeader>
+          
+          {tutorialSteps[currentStep].steps && (
+            <ul className="list-disc pl-5 space-y-2 text-sm">
+              {tutorialSteps[currentStep].steps.map((step, index) => (
+                <li key={index}>{step}</li>
+              ))}
+            </ul>
+          )}
           
           <div className="flex justify-between mt-8">
             <Button

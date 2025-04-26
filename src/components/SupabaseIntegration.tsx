@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Database } from "lucide-react";
+import { Database, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export function SupabaseIntegration() {
@@ -18,13 +18,15 @@ export function SupabaseIntegration() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleConnectClick = () => {
-    // An dieser Stelle würde normalerweise die Integration mit Supabase aktiviert werden
-    // Da dies eine native Integration von Lovable ist, informieren wir den Benutzer
-    // über den korrekten Weg zur Aktivierung
     toast({
-      title: "Supabase-Integration",
-      description: "Bitte klicken Sie auf den grünen Supabase-Button in der oberen rechten Ecke, um die Integration zu aktivieren.",
-      duration: 5000,
+      title: "Supabase-Integration aktivieren",
+      description: "Klicken Sie auf den grünen Supabase-Button in der rechten oberen Ecke der Lovable-Plattform, um die Integration zu verbinden.",
+      action: {
+        label: "Dokumentation",
+        altText: "Zur Dokumentation",
+        onClick: () => window.open("https://docs.lovable.dev/integrations/supabase", "_blank")
+      },
+      duration: 7000,
     });
     setIsDialogOpen(false);
   };
@@ -42,19 +44,26 @@ export function SupabaseIntegration() {
           <DialogHeader>
             <DialogTitle>Supabase-Integration</DialogTitle>
             <DialogDescription>
-              Verbinden Sie Ihr Buchprojekt mit einer Supabase-Datenbank, um Ihre Daten sicher zu speichern und zusätzliche Funktionen freizuschalten.
+              Verbinden Sie Ihr Buchprojekt mit Supabase, um Ihre Daten sicher zu speichern.
             </DialogDescription>
           </DialogHeader>
           
-          <div className="space-y-4 py-4">
-            <div className="text-sm">
-              <p className="mb-2">Mit Supabase erhalten Sie:</p>
-              <ul className="list-disc pl-5 space-y-1">
-                <li>Sichere Cloud-Speicherung für Ihre Buchprojekte</li>
-                <li>Benutzerauthentifizierung</li>
-                <li>Automatische Backups</li>
-                <li>Zugriff auf Ihre Projekte von verschiedenen Geräten</li>
-              </ul>
+          <div className="space-y-4 py-4 text-sm">
+            <h3 className="font-semibold">So aktivieren Sie die Integration:</h3>
+            <ol className="list-decimal pl-5 space-y-2">
+              <li>Öffnen Sie die Lovable-Plattform</li>
+              <li>Suchen Sie den grünen Supabase-Button in der rechten oberen Ecke</li>
+              <li>Klicken Sie auf "Projekt verbinden" oder "Neues Projekt erstellen"</li>
+              <li>Folgen Sie den Anweisungen zur Authentifizierung</li>
+            </ol>
+            
+            <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-md">
+              <p className="flex items-center gap-2">
+                <ExternalLink size={16} className="text-yellow-600" />
+                <span className="text-yellow-800">
+                  Die Integration erfolgt direkt über die Lovable-Plattform, nicht in dieser Anwendung.
+                </span>
+              </p>
             </div>
           </div>
           
@@ -62,9 +71,10 @@ export function SupabaseIntegration() {
             <Button
               type="button"
               onClick={handleConnectClick}
+              variant="secondary"
               className="w-full"
             >
-              Mit Supabase verbinden
+              Integrationsanleitung anzeigen
             </Button>
           </DialogFooter>
         </DialogContent>
