@@ -39,7 +39,7 @@ interface ProjectData {
 
 export default function Index() {
   const [genre, setGenre] = useState("roman");
-  const [selectedFormat, setSelectedFormat<{
+  const [selectedFormat, setSelectedFormat] = useState<{
     name: string;
     dimensions: string;
     charactersPerPage: string;
